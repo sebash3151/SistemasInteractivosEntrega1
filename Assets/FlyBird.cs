@@ -20,6 +20,10 @@ public class FlyBird : MonoBehaviour
         {
             rb.velocity = Vector3.up * velocity;
         }
+        else if (Input.GetKeyDown(KeyCode.Space))
+        {
+            rb.velocity = Vector3.up * velocity;
+        }
 
     }
 
