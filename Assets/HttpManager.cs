@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Networking;
+using UnityEngine.UI;
 
 public class HttpManager : MonoBehaviour
 {
@@ -9,6 +10,10 @@ public class HttpManager : MonoBehaviour
     [SerializeField]
     private string URL;
     // Start is called before the first frame update
+
+    [SerializeField] Text[] textos;
+    [SerializeField] int contador = 0;
+
     void Start()
     {
         
@@ -36,6 +41,8 @@ public class HttpManager : MonoBehaviour
 
             foreach (ScoreData score in resData.scores)
             {
+                textos[contador].text = score.userId + " | " + score.value;
+                contador++;
                 Debug.Log(score.userId +" | "+score.value);
             }
         }
@@ -43,6 +50,11 @@ public class HttpManager : MonoBehaviour
         {
             Debug.Log(www.error);
         }
+    }
+
+    public void Reseteo()
+    {
+        contador = 0;
     }
    
 }
