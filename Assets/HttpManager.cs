@@ -13,6 +13,7 @@ public class HttpManager : MonoBehaviour
 
     [SerializeField] Text[] textos;
     [SerializeField] int contador = 0;
+    private int usuarios = 0;
 
     void Start()
     {
@@ -38,6 +39,22 @@ public class HttpManager : MonoBehaviour
         else if(www.responseCode == 200){
             //Debug.Log(www.downloadHandler.text);
             Scores resData = JsonUtility.FromJson<Scores>(www.downloadHandler.text);
+
+            foreach (ScoreData score in resData.scores)
+            {
+                usuarios++;
+            }
+
+            for (int i = 0; i <= usuarios; i++)
+            {
+                for (int j = 0; j < length; j++)
+                {
+                    resData.scores[j] > resData.scores[j + 1];
+                    var temp = resData.scores[j];
+                    resData.scores[j] = resData.scores[j + 1];
+                    resData.scores[j + 1] = temp;
+                }
+            }
 
             foreach (ScoreData score in resData.scores)
             {
