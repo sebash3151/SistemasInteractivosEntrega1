@@ -17,7 +17,7 @@ public class HttpManager : MonoBehaviour
 
     void Start()
     {
-        
+
     }
 
     public void ClickGetScores()
@@ -27,7 +27,7 @@ public class HttpManager : MonoBehaviour
 
     IEnumerator GetScores()
     {
-        string url = URL + "/leaders";
+        string url = URL + "/scores";
         UnityWebRequest www = UnityWebRequest.Get(url);
 
         yield return www.SendWebRequest();
@@ -36,31 +36,37 @@ public class HttpManager : MonoBehaviour
         {
             Debug.Log("NETWORK ERROR " + www.error);
         }
-        else if(www.responseCode == 200){
+        else if (www.responseCode == 200)
+        {
             //Debug.Log(www.downloadHandler.text);
             Scores resData = JsonUtility.FromJson<Scores>(www.downloadHandler.text);
 
-            foreach (ScoreData score in resData.scores)
+            foreach (ScoreData score in resData.data)
             {
                 usuarios++;
             }
 
             for (int i = 0; i <= usuarios; i++)
             {
-                for (int j = 0; j < length; j++)
+                for (int j = 0; j < usuarios- 1 ; j++)
                 {
-                    resData.scores[j] > resData.scores[j + 1];
-                    var temp = resData.scores[j];
-                    resData.scores[j] = resData.scores[j + 1];
-                    resData.scores[j + 1] = temp;
+                    if (resData.data[j].value < resData.data[j + 1].value)
+                    {
+                        var temp = resData.data[j];
+                        resData.data[j] = resData.data[j + 1];
+                        resData.data[j + 1] = temp;
+                    }
+                    
+                    
                 }
             }
 
-            foreach (ScoreData score in resData.scores)
+            foreach (ScoreData s in resData.data)
             {
-                textos[contador].text = score.userId + " | " + score.value;
+                textos[contador].text = s.username + " : " + s.value;
                 contador++;
-                Debug.Log(score.userId +" | "+score.value);
+                //Debug.Log(s.user_id + " | " + s.value);
+                //Debug.Log(usuarios);
             }
         }
         else
@@ -72,21 +78,23 @@ public class HttpManager : MonoBehaviour
     public void Reseteo()
     {
         contador = 0;
+        usuarios = 0;
     }
-   
+
 }
 
 
 [System.Serializable]
 public class ScoreData
 {
-    public int userId;
+    public int user_id;
     public int value;
+    public string username;
 
 }
 
 [System.Serializable]
 public class Scores
 {
-    public ScoreData[] scores;
+    public ScoreData[] data;
 }
