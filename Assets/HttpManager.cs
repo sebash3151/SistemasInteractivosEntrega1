@@ -12,7 +12,7 @@ public class HttpManager : MonoBehaviour
     // Start is called before the first frame update
 
     [SerializeField] Text[] textos;
-    [SerializeField] int contador = 0;
+    int contador = 0;
     private int usuarios = 0;
 
     void Start()
